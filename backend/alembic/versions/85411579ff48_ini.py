@@ -1,8 +1,8 @@
-"""init
+"""ini
 
-Revision ID: 49e7823e128c
+Revision ID: 85411579ff48
 Revises: 
-Create Date: 2024-04-15 18:58:49.676012
+Create Date: 2024-04-16 12:14:41.949238
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '49e7823e128c'
+revision = '85411579ff48'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -34,7 +34,7 @@ def upgrade():
     op.create_index(op.f('ix_users_surname'), 'users', ['surname'], unique=False)
     op.create_table('clients',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('account_number', sa.BigInteger(), nullable=False),
+    sa.Column('account_number', sa.String(), nullable=False),
     sa.Column('surname', sa.String(), nullable=False),
     sa.Column('name', sa.String(), nullable=False),
     sa.Column('middle_name', sa.String(), nullable=False),
@@ -45,7 +45,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['responsible_user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_clients_account_number'), 'clients', ['account_number'], unique=True)
+    op.create_index(op.f('ix_clients_account_number'), 'clients', ['account_number'], unique=False)
     op.create_index(op.f('ix_clients_birth_date'), 'clients', ['birth_date'], unique=False)
     op.create_index(op.f('ix_clients_id'), 'clients', ['id'], unique=False)
     op.create_index(op.f('ix_clients_itn'), 'clients', ['itn'], unique=False)

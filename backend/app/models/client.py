@@ -10,9 +10,7 @@ class Client(Base):
     __tablename__ = "clients"
 
     id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
-    account_number: Mapped[BigInteger] = mapped_column(
-        BigInteger, unique=True, index=True
-    )
+    account_number: Mapped[str] = mapped_column(String, index=True)
     surname: Mapped[str] = mapped_column(String, index=True)
     name: Mapped[str] = mapped_column(String, index=True)
     middle_name: Mapped[str] = mapped_column(String, index=True)

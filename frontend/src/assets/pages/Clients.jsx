@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Divider, Radio, Select, Space, Table} from 'antd';
+import {Button, Divider, Modal, Radio, Select, Space, Table} from 'antd';
 import UserService from "../api/UserService.js";
 import Cookies from "js-cookie";
 import {useNavigate} from 'react-router-dom';
-import {DeleteOutlined} from "@ant-design/icons";
-const { Option } = Select;
+import {DeleteOutlined, PlusOutlined} from "@ant-design/icons";
+import CreateClientForm from "../components/CreateClient.jsx";
+
+const {Option} = Select;
 const columns = [
     {
         title: 'id',
@@ -70,41 +72,53 @@ export default function Clients() {
     const [data, setData] = useState([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const navigate = useNavigate();
+    const [isModalVisible, setIsModalVisible] = useState(false);
 
     const rowSelection = {
         onChange: (selectedRowKeys, selectedRows) => {
             setSelectedRowKeys(selectedRowKeys);
         },
     };
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+
+    const handleOk = () => {
+        setIsModalVisible(false);
+    };
+
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
     const handleDelete = async (selectedRowKeys, data, setData) => {
-        // Delete the selected rows from the server
-        console.log("Selected rows: ", selectedRowKeys);
         try {
             await UserService.delete_clients(selectedRowKeys);
-            // Remove the selected rows from the local state
             setData(data.filter(row => !selectedRowKeys.includes(row.id)));
             setSelectedRowKeys([]);
         } catch (error) {
             console.error(error);
         }
     };
+    const fetchData = async () => {
+        const accessToken = Cookies.get('access_token');
+        if (!accessToken) {
+            navigate('/');
+            return;
+        }
+        try {
+            const response = await UserService.get_user_clients();
+            setData(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+    const refreshClients = fetchData;
     useEffect(() => {
-        const fetchData = async () => {
-            const accessToken = Cookies.get('access_token');
-            if (!accessToken) {
-                navigate('/');
-                return;
-            }
-            try {
-                const response = await UserService.get_user_clients();
-                setData(response.data);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+
 
         fetchData();
     }, []);
+
 
     return (
         <div>
@@ -118,12 +132,21 @@ export default function Clients() {
                 columns={columns}
                 dataSource={data}
             />
-            <Button className="ml-2" type="primary" icon={<DeleteOutlined/>}
-                    onClick={() => handleDelete(selectedRowKeys, data, setData)}
-                    disabled={selectedRowKeys.length === 0}>
-                Delete
-            </Button>
-        </div>
+            <div className="flex justify-start space-x-4 ml-4">
+                <Button  type="primary" icon={<DeleteOutlined/>}
+                        onClick={() => handleDelete(selectedRowKeys, data, setData)}
+                        disabled={selectedRowKeys.length === 0}>
+                    Delete
+                </Button>
+                <Button type="primary" icon={<PlusOutlined/>} onClick={showModal}>
+                    Создать клиента
+                </Button>
+                <Modal  title="Создать клиента" open={isModalVisible} onOk={handleOk}
+                       onCancel={handleCancel}>
+                    <CreateClientForm refreshClients={refreshClients}/>
+                </Modal>
+            </div>
 
+        </div>
     );
 }

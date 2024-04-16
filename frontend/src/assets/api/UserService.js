@@ -5,9 +5,7 @@ let serverPath = "http://localhost:8000/api/v1";
 axios.interceptors.response.use(undefined, async error => {
     if (error.config && error.response && error.response.status === 401) {
         const refreshToken = Cookies.get('refresh_token');
-        console.log(refreshToken)
         const response = await axios.post(serverPath + `/users/refresh?refresh_token=${refreshToken}`, {});
-        console.log(response)
         Cookies.set('access_token', response.data.access_token);
         error.config.headers['Authorization'] = `Bearer ${response.data.access_token}`;
         return axios(error.config);
@@ -61,6 +59,17 @@ export default class UserService {
             }
         });
 
+
+        return response;
+    }
+
+    static async create_clients(client) {
+        const accessToken = Cookies.get('access_token');
+        const response = await axios.post(serverPath + "/users/create_client", client, {
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
         return response;
     }
 }
