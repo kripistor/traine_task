@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 class Settings(BaseSettings):
-    PROJECT_NAME: str = "todo-spo"
+    PROJECT_NAME: str = "trainee_task"
 
     SENTRY_DSN: Optional[HttpUrl] = None
 

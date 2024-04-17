@@ -43,8 +43,10 @@ const columns = [
         render: (text, record) => (
             <Space size="middle">
                 <Select defaultValue={text} style={{width: 120}} onChange={(value) => handleChange(value, record)}>
-                    <Option value="not_at_work">Не в работе</Option>
+                    <Option value="rejection">Отказ</Option>
                     <Option value="work">В работе</Option>
+                    <Option value="deal _closed">Сделка закрыта</Option>
+                    <Option value="not_at_work">Не в работе</Option>
                 </Select>
                 <Button type="primary" onClick={() => handleSave(record)}>Save</Button>
             </Space>

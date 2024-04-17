@@ -13,7 +13,7 @@ class ClientCreate(BaseModel):
     middle_name: str
     birth_date: date
     itn: int
-    status: str
+    status: str = 'not_at_work'
     responsible_user_id: int
 
     class Config:

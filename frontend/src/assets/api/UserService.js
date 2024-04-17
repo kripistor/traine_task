@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from 'js-cookie';
 
-let serverPath = "http://localhost:8000/api/v1";
+let serverPath = "http://intertask.kripistor.ru/api/v1";
 axios.interceptors.response.use(undefined, async error => {
     if (error.config && error.response && error.response.status === 401) {
         const refreshToken = Cookies.get('refresh_token');

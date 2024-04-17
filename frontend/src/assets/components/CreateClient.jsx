@@ -43,9 +43,11 @@ export default function CreateClientForm(props) {
                 <Input/>
             </Form.Item>
             <Form.Item name="status" label="Статус" rules={[{required: true}]}>
-                <Select placeholder="Выберите статус">
+                <Select defaultValue="not_at_work" placeholder="Выберите статус">
                     <Option value="not_at_work">Не в работе</Option>
                     <Option value="work">В работе</Option>
+                    <Option value="rejection">Отказ</Option>
+                    <Option value="deal _closed">Сделка закрыта</Option>
                 </Select>
             </Form.Item>
             <Form.Item>

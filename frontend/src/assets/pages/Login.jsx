@@ -22,7 +22,7 @@ export default function Login() {
             <Space direction="vertical">
                 <Input
                     size="large"
-                    placeholder="default size"
+                    placeholder="login"
                     prefix={<UserOutlined />}
                     className="h-12 w-72"
                     onChange={(e) => setLogin(e.target.value)}
